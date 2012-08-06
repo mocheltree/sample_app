@@ -6,7 +6,7 @@ describe User do
    @user =  User.new(name: "Example user", 
 		        email: "user@Example.com", password: "foobar",
             password_confirmation: "foobar") 
- end
+  end
 	subject { @user }
 
 	it { should respond_to(:name) }
@@ -63,6 +63,17 @@ describe User do
     
     it { should_not be_valid }
 
+  end
+
+  describe "email address with mixed case" do
+    let(:mixed_case_email) { "Foo@ExAMPle.com" }
+
+    it "should be saved as all lower-case" do
+      @user.email = mixed_case_email
+      @user.save
+      @user.reload.email.should == mixed_case_email.downcase
+
+    end
   end
 
   describe "when password is not present" do
